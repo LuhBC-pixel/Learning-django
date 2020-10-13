@@ -33,10 +33,21 @@ def cadastro(request):
         return render(request, 'usuarios/cadastro.html')
 
 def login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        senha = request.POST['senha']
+
+        if not email.strip() or senha == '':
+            print('Os campos email e senha não pode ficar em branco')
+            return redirect('login')
+
+        print(email, senha)
+        return redirect('dashboard')      
+
     return render(request, 'usuarios/login.html')
 
 def logout(request):
     pass
 
 def dashboard(request):
-    pass
+    return render(request, 'usuarios/dashboard.html')
