@@ -17,13 +17,17 @@ def cadastro(request):
         if campo_vazio(email):
             messages.error(request, 'O campo email não pode ficar em branco')
             return redirect('cadastro')
+        
+        if campo_vazio(senha):
+            messages.error(request, 'O campo senha não pode ficar em branco')
+            return redirect('cadastro')
+
+        if campo_vazio(senha2):
+            messages.error(request, 'O campo Confirmação de senha não pode ficar em branco')
+            return redirect('cadastro')
 
         if senhas_nao_sao_iguais(senha, senha2):
             messages.error(request, 'As senhas não são iguais')
-            return redirect('cadastro')
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Usuário já cadastrado')
             return redirect('cadastro')
 
         if User.objects.filter(username=nome).exists():
@@ -85,6 +89,27 @@ def cria_receita(request):
         categoria = request.POST['categoria']
         foto_receita = request.FILES['foto_receita']
         user = get_object_or_404(User, pk=request.user.id)
+
+        if campo_vazio(nome_receita):
+            messages.error(request, 'O campo Título da receita não pode ficar em branco')
+            return redirect('cria_receita')
+
+        if campo_vazio(ingredientes):
+            messages.error(request, 'O campo ingredientes não pode ficar em branco')
+            return redirect('cria_receita')
+        
+        if campo_vazio(modo_preparo):
+            messages.error(request, 'O campo modo preparo não não pode ficar em branco')
+            return redirect('cria_receita')
+        
+        if campo_vazio(rendimento):
+            messages.error(request, 'O campo rendimento não pode ficar em branco')
+            return redirect('cria_receita')
+
+        if campo_vazio(categoria):
+            messages.error(request, 'O campo categoria não pode ficar em branco')
+            return redirect('cria_receita')
+
         receita = Receita.objects.create(pessoa=user, nome_receita=nome_receita, ingredientes=ingredientes, modo_preparo=modo_preparo, tempo_preparo=tempo_preparo, rendimento=rendimento, categoria=categoria, foto_receita=foto_receita)
         receita.save()
         return redirect('dashboard')
