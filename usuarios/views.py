@@ -11,11 +11,11 @@ def cadastro(request):
         senha2 = request.POST['password2']
 
         if not nome.strip():
-            print('O campo nome não pode ficar em branco')
+            messages.error(request, 'O campo nome não pode ficar em branco')
             return redirect('cadastro')
         
         if not email.strip():
-            print('O campo email não pode ficar em branco')
+            messages.error(request, 'O campo email não pode ficar em branco')
             return redirect('cadastro')
 
         if senha != senha2:
@@ -23,7 +23,7 @@ def cadastro(request):
             return redirect('cadastro')
         
         if User.objects.filter(email=email).exists():
-            print('Usuário já cadastrado')
+            messages.error(request, 'Usuário já cadastro')
             return redirect('cadastro')
         
         user = User.objects.create_user(username=nome, email=email, password=senha)
@@ -40,10 +40,9 @@ def login(request):
         senha = request.POST['senha']
 
         if email == '' or senha == '':
-            print('Os campos email e senha não pode ficar em branco')
+            messages.error(request, 'Os campos email e senha não pode ficar em branco')
             return redirect('login')
 
-        print(email, senha)
         if User.objects.filter(email=email).exists():
             nome = User.objects.filter(email=email).values_list('username', flat=True).get()
             user = auth.authenticate(request, username=nome, password=senha)
