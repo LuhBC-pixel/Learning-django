@@ -65,10 +65,12 @@ def login(request):
     return render(request, 'usuarios/login.html')
 
 def logout(request):
+    """Realiza o logout de uma pessoa no sistema"""
     auth.logout(request)
     return redirect('index')
 
 def dashboard(request):
+    """Cria um painel de receitas que o usuário criou"""
     if request.user.is_authenticated:
         id = request.user.id
         receitas = Receita.objects.order_by('-date_receita').filter(pessoa=id)
@@ -82,7 +84,9 @@ def dashboard(request):
         return redirect('index')
     
 def campo_vazio(campo):
+    """Informa se o campo está vazio"""
     return not campo.strip()
 
 def senhas_nao_sao_iguais(senha, senha2):
+    """Informa se as senhas são iguais ou não"""
     return senha != senha2
